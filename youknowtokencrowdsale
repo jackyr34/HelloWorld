@@ -1,0 +1,45 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.6;
+
+// ============================================================================
+// Crowdsale IERG 4004 Assignment
+// 
+// -- Put your information below --
+// Author:  YouKnowHisName      
+// SID:     1155012345
+// Date:    2022-05-11
+// ============================================================================
+
+import "./YouKnowToken.sol";   // import our token contract
+    
+// ----------------------------------------------------------------------------
+// Minimum Crowdsale Contract
+// ----------------------------------------------------------------------------
+     
+contract YouKnowTokenCrowdsale {
+    
+    address payable public wallet;      // Address where funds are collected. Everyone can send eth to the wallet. U can call the contract later.
+    
+    ERC20Interface public token;        // refer to a YouKnowToken with ERC20 standard
+    
+    constructor() public {
+        wallet = msg.sender;    //
+        token = new YouKnowToken(); // deploy token when create crowdsale, crowdsale address owns all initial tokens
+        //new is a keyword, to create a new contract. Means use this contract (crowdsale) to deploy youknowtoken
+    }
+     
+    receive() external payable {  // fallback to buyTokens when direct ether transfer was made to this contract
+        buyTokens(msg.sender);
+    }
+     
+    function buyTokens(address beneficiary) public payable {
+        uint256 weiAmount = msg.value;
+        uint256 tokens = uint256(weiAmount/1000);    // convert to uint16 to match data type in our token
+        require(tokens != 0);
+        token.transfer (beneficiary, msg.value);   // msg.sender can be replaced by beneficiary. Transfer token to the one who payed ether
+        wallet.transfer (msg.value);           // forward ether to our funds receiving wallet. Wallet.transfer (weiAmount) also ok
+    }
+    function balanceOftoken (address _address) external view returns(uint){
+        return token.balanceOf(_address);
+    }
+}
