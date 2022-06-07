@@ -1,0 +1,50 @@
+// SPDX- License- Identifier: MIT
+pragma solidity >0.8.7;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol"; //To allow the contract can transfer ERC20, use the function from ERC20
+
+contract donation{
+    address payable public owner; //Public means visible to other function inside and outside the smart contract. Have getter function.
+    //By default, owner is not payable
+
+    constructor() {
+        owner = payable(msg.sender); //By default, msg.sender is not payable, so we set payable
+    }
+
+    receive() external payable {} //Enable this contract can receive $. Receive function do not require "function" keyword
+    // Receive is a key word function 
+    // By default without this function, send money to this address will be error
+    // Payable係收錢key word
+    // You cannot call this function,it will trigger this function (receive) when send eth to this contract
+
+    function withdraw (uint _amount) external{
+        require(msg.sender == owner, "Only the owner can call this function"); //Only owner of the contract can call this function
+        payable(msg.sender).transfer (_amount); //transfer is a key word function
+        //.transfer is a transfer function of eth
+        //By default , this allow to transfer Eth only
+    }
+
+    function getbalance() external view returns (uint){
+        return address(this).balance;
+       }
+
+    ERC20 WETH = ERC20(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
+    //WETH is a variable name
+    // ERC20 - name of the interface
+    function transferWETH (uint _amount) external{
+        require(msg.sender == owner, "Only the owner can call this");
+        WETH.transfer(msg.sender, _amount); //.transfer (transfer function in weth contract)
+    // Allow to transfer WETH only
+    }
+
+    function transferERC20 (address tokenAddress, uint _amount) external {
+    ERC20 token = ERC20 (tokenAddress);
+    require(msg.sender == owner, "Only the owner can call this");
+    token.transfer(msg.sender, _amount);
+    //Allow to transfer any ERC20 Token
+    }
+    }
+    
+
+ 
+
