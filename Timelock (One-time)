@@ -1,0 +1,36 @@
+//SPDX-License-Identifier: MIT
+pragma solidity ^0.8.10;
+
+contract TimelockWallet{
+    event Deposit(uint amount);
+    event Withdraw(uint amount);
+    uint locktime;
+
+    constructor () {
+        locktime = block.timestamp + 10 minutes;
+        owner = msg.sender;
+    }
+
+    address public owner = msg.sender;
+    receive() external payable{
+        emit Deposit(msg.value);
+    }
+
+    function withdraw() external{
+        require (block.timestamp >= locktime, "lock time has not expired yet");
+        require (msg.sender == owner, "you are not the owner");
+        emit Withdraw(address(this).balance);
+        payable(msg.sender).transfer(address(this).balance);
+
+    }
+    function ShowTimeLeft () external view returns(uint) {
+        uint TimeLeft = locktime - block.timestamp;
+        return TimeLeft;
+    }
+    function ShowBalance () external view returns(uint){
+        uint balance = address(this).balance;
+        return balance;
+    }
+
+
+}
