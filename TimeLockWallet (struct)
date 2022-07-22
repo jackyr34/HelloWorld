@@ -15,7 +15,7 @@ contract TimeLockWalletV1{
     receive() external payable{ 
         Locker memory newLocker = Locker({  //Locker is a type
             value: msg.value,
-            locktime: block.timestamp + 5 minutes,
+            locktime: block.timestamp + 1 minutes,
             canOpen: true
     });
         Info[msg.sender].push(newLocker);
@@ -34,10 +34,6 @@ contract TimeLockWalletV1{
         return timeLeft;
     }
 
-    function showBalance (uint txid) external view returns (uint) {
-        uint balance= Info[msg.sender][txid].value;
-        return balance;
-    }
     function showThisBalance () external view returns(uint){
         return address(this).balance;
     }
