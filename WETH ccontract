@@ -1,0 +1,44 @@
+//SPDX- License- Identifier: MIT
+pragma solidity ^0.8.13;
+
+import"@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract WETH is ERC20 {
+    event Deposit(address indexed account, uint amount);
+    event Withdraw(address indexed account, uint amount);
+
+    constructor()ERC20("Wrapped Ether","WETH"){} //From ERC20 contract
+
+    fallback() external payable{
+        deposit();
+    }
+
+    function deposit() public payable{
+        _mint(msg.sender, msg.value); //From ERC20 contract
+        emit Deposit(msg.sender,msg.value);
+    }
+
+    function withdraw(uint _amount) external{
+        _burn(msg.sender, _amount); //From ERC20 contract
+        payable(msg.sender).transfer(_amount);
+        emit Withdraw(msg.sender,_amount);
+    }
+}
+    
+    //Inherited by the erc20 contract
+    /*
+    function _mint(address account, uint256 amount) internal virtual {
+        require(account != address(0), "ERC20: mint to the zero address");
+
+        _beforeTokenTransfer(address(0), account, amount);
+
+        _totalSupply += amount;
+        unchecked {
+            // Overflow not possible: balance + amount is at most totalSupply + amount, which is checked above.
+            _balances[account] += amount;
+        }
+        emit Transfer(address(0), account, amount);
+
+        _afterTokenTransfer(address(0), account, amount);
+    }
+    */
