@@ -1,0 +1,22 @@
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity >=0.7.0 <0.9.0;
+contract gambling{
+
+    uint nonce;
+
+    function random() public returns (uint) {
+        uint randomnumber = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, nonce))) % 100;
+        nonce++;  
+        return randomnumber;
+        //Blockchain is deterministic, so cannot have a true random number. 
+        //Can only hash 3 factors then mod 100. This number is not a true random nuumber as it is predictable.
+    }
+
+    receive () external payable{
+        require(msg.value == 10000000000000000, "Please input 0.01 eth");
+        uint output = random();
+        if (output <10) {
+            payable(msg.sender).transfer(address(this).balance);
+        }
+    }
+}
