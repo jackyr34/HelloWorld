@@ -4,12 +4,13 @@ contract gambling{
 
     uint nonce;
 
-    function random() public returns (uint) {
+    function random() public returns (uint) { //Public allows to call internally
         uint randomnumber = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, nonce))) % 100;
         nonce++;  
         return randomnumber;
         //Blockchain is deterministic, so cannot have a true random number. 
         //Can only hash 3 factors then mod 100. This number is not a true random nuumber as it is predictable.
+        //Possible results of xxx mod 10 are 0,1,2,3,4,5,6,7,8,9.
     }
 
     receive () external payable{
