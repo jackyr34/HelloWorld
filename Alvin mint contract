@@ -1,0 +1,62 @@
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.7.0 <0.9.0;
+
+//ERC721 v4
+import "erc721a/contracts/ERC721A.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract Alpaca is ERC721A, Ownable{
+    string private _baseTokenURI;
+
+    bool public isMintActive = false;
+    bool public isRevealed = false;
+    uint256 public maxSupply = 10000;
+    uint256 public maxMintPerWallet = 1;
+
+    constructor() ERC721A("Alpaca", "ALPACA") {}
+
+    function freeMint() external payable{
+        require(isMintActive, "Mint inactive");
+        require(msg.sender == tx.origin, "The caller is another contract"); //cannot contract mint
+        require(totalSupply() < maxSupply, "reached max supply");
+        require(_numberMinted(msg.sender) < maxMintPerWallet, "can not mint this many");
+
+        // msg.sender must be EOA (external own address (not contract address)), safemint is unnecessary, because msg.sender must not be contract, no need to check if contract can receive 721 or not
+        _mint(msg.sender, 1);
+    }
+    function numberMinted(address owner) public view returns (uint256) {
+        return _numberMinted(owner);
+    }
+    function setMaxMintPerWallet(uint256 _maxMint) external onlyOwner {
+        maxMintPerWallet = _maxMint;
+    }
+    function setMaxSupply(uint256 _maxSupply) external onlyOwner {
+        require(totalSupply() <= _maxSupply, "reached _maxSupply");
+        maxSupply = _maxSupply;
+    }
+
+    function setIsMintActive(bool _isActive) external onlyOwner {
+        isMintActive = _isActive;
+    }
+
+    function setIsRevealed (bool _isRevealed) external onlyOwner {
+        isRevealed = _isRevealed;
+    }
+
+    function _baseURI() internal view override returns (string memory) {
+        return _baseTokenURI;
+    }
+
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        if (!_exists(tokenId)) revert URIQueryForNonexistentToken();
+        string memory baseURI = _baseURI();
+        if (!isRevealed) return bytes(baseURI).length !=0? baseURI : "";
+        return bytes(baseURI).length != 0 ? string(abi.encodePacked(baseURI, _toString(tokenId))) : "";
+    }
+
+    function withdraw() public payable onlyOwner {
+        (bool success, ) = payable(msg.sender).call{value: address(this).balance}("");
+        require(success, "Transfer failed.");
+        //3 method to send eth including call, send, transfer
+    }
+}
