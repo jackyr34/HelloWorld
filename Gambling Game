@@ -21,3 +21,5 @@ contract gambling{
         }
     }
 }
+
+//Depolyed on Goerli Testnet, check: https://goerli.etherscan.io/address/0xd5fec9732115b76f04011821a98e85d5de7bfce5
