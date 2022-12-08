@@ -1,5 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
+
+/*This is a gamling game.
+To start with, send 0.005 eth into this wallet. Every time you send money into this wallet, you have a certain chance to win all the eth
+in the pool. Check the balance on your own wallet or this wallet to see if you won the prize!*/
+
 contract gambling{
 
     uint nonce;
@@ -14,7 +19,7 @@ contract gambling{
     }
 
     receive () external payable{
-        require(msg.value == 10000000000000000, "Please input 0.01 eth");
+        require(msg.value == 10000000000000000, "Please input 0.005 eth");
         uint output = random();
         if (output <10) {
             payable(msg.sender).transfer(address(this).balance);
