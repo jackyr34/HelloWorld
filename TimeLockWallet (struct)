@@ -1,6 +1,17 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
+/* This is a TimeLockWallet.
+To start with, you need to send eth into this contract using you crypto wallet (e.g., MetaMask).
+Then you can withdraw that amount of eth after a certain period of time i.e., 5 mins. 
+Go to "write contract" on etherscan and click the "withdraw" function. 
+Type in the number on txid row, the number is which deposit you want to withdraw minus 1. If you want to
+withdraw the eth on your first deposit, type in "0". If you want to withdraw the eth on your second 
+deposit, type in "1" and vice versa.
+
+In "Read Contract", there are more functions. You can check any available deposit you can withdraw in 
+"Info" function. You can also check when you are able to wtihdraw certain deposit in "showTimeLeft" function.*/
+
 contract TimeLockWalletV1{
     event Deposit(uint amount,address depositer, uint indexed txid);
     event Withdraw(uint amount, address withdrawer, uint indexed txid);
@@ -15,7 +26,7 @@ contract TimeLockWalletV1{
     receive() external payable{ 
         Locker memory newLocker = Locker({  //Locker is a type
             value: msg.value,
-            locktime: block.timestamp + 1 minutes,
+            locktime: block.timestamp + 5 minutes,
             canOpen: true
     });
         Info[msg.sender].push(newLocker);
