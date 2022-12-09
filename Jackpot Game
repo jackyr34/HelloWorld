@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
 
-/*This is a gamling game.
+/*This is a Jackpot game.
 To start with, send 0.005 eth into this contract. Every time you send 0.005 eth, you have a certain chance to win all the eth
 in the pool. Check the balance in your own wallet or this contract to see if you won the prize!*/
 
-contract gamblingGame{
+contract jackpotGame{
 
     uint nonce;
 
