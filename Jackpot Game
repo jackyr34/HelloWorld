@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity >=0.8.7;
 
 /*This is a Jackpot game.
 To start with, send 0.005 eth into this contract. Every time you send 0.005 eth, you have a certain chance to win all the eth
@@ -19,12 +19,10 @@ contract jackpotGame{
     }
 
     receive () external payable{
-        require(msg.value == 10000000000000000, "Please input 0.005 eth");
+        require(msg.value == 5000000000000000, "Please input 0.005 eth");
         uint output = random();
         if (output <10) {
             payable(msg.sender).transfer(address(this).balance);
         }
     }
 }
-
-//Depolyed on Goerli Testnet, check: https://goerli.etherscan.io/address/0xd5fec9732115b76f04011821a98e85d5de7bfce5
