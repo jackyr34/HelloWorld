@@ -2,10 +2,10 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 /*This is a gamling game.
-To start with, send 0.005 eth into this wallet. Every time you send money into this wallet, you have a certain chance to win all the eth
-in the pool. Check the balance on your own wallet or this wallet to see if you won the prize!*/
+To start with, send 0.005 eth into this contract. Every time you send 0.005 eth, you have a certain chance to win all the eth
+in the pool. Check the balance in your own wallet or this contract to see if you won the prize!*/
 
-contract gambling{
+contract gamblingGame{
 
     uint nonce;
 
