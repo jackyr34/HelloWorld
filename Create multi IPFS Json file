@@ -1,0 +1,23 @@
+//Create multi Json file
+//Import the fs library
+
+const fs = require("fs");
+
+// loop for each file
+for (let i = 0; i <= 4; i++) {
+  // draft for the content of the file
+  const metadata = {
+    name: "Soulbound Badge #" + i,
+    description: "this is my soulbound token!",
+    image:
+      "ipfs://bafybeiamey5h7mff6nzaneuktfibkmtlhfvycsgqhfnk3ycwazgax6iurm/" +
+      i +
+      ".png",
+  };
+
+  // transform the object into a string
+  const dataToWrite = JSON.stringify(metadata);
+
+  // use the fs library to write the string into the file
+  fs.writeFileSync(i + ".json", dataToWrite, "utf8");
+}
