@@ -86,7 +86,7 @@ contract MultiSigWallet{
     }
 
     modifier notExecuted(uint _txId) {
-        require(!transactions[_txId].executed, "tx already executed"); //require (要true先pass)
+        require(!transactions[_txId].executed, "tx already executed"); //require (Need true to pass)
         _;
     }
 
